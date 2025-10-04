@@ -1,0 +1,3 @@
+Hello World 123! Test 456.
+Line 2: ABC abc 789
+@#$% Special chars
