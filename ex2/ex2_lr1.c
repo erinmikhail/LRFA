@@ -1,74 +1,51 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
-int* find_primes(int max_count) {
-    if (max_count <= 0) return NULL;
-    
-    int limit;
-    if (max_count < 100) {
-        limit = 1000;  //  100 простых чисел
-    } else if (max_count < 1000) {
-        limit = 10000; //  1000 простых чисел
-    } else {
-        limit = max_count * 20; 
-    }
-    
-
-    char* is_prime = (char*)malloc((limit + 1) * sizeof(char));
-    int* primes = (int*)malloc(max_count * sizeof(int));
-    
-
-    for (int i = 0; i <= limit; i++) {
-        is_prime[i] = 1;
-    }
-    is_prime[0] = is_prime[1] = 0;
-    
-    
-    for (int i = 2; i * i <= limit; i++) {
-        if (is_prime[i]) {
-            for (int j = i * i; j <= limit; j += i) {
-                is_prime[j] = 0;
-            }
-        }
-    }
-    
-    int count = 0;
-    for (int i = 2; i <= limit && count < max_count; i++) {
-        if (is_prime[i]) {
-            primes[count++] = i;
-        }
-    }
-    
-    free(is_prime);
-    return primes;
-}
+#include "ex2_lr1.h"
 
 int main() {
-
-
-
     int T;
-
-    printf("Введите кол-во чисел, которые будет вводить, а потом каждое число через enter: \n");
-
-    scanf("%d", &T);
+    
+    printf("Введите количество запросов: ");
+    if (scanf("%d", &T) != 1 || T <= 0) {
+        printf("Ошибка: неверное количество запросов\n");
+        return 1;
+    }
     
     int *queries = malloc(T * sizeof(*queries));
+    if (!queries) {
+        printf("Ошибка выделения памяти\n");
+        return 1;
+    }
+    
     int max_n = 0;
+    printf("Введите %d чисел (по одному в строке):\n", T);
     
     for (int i = 0; i < T; i++) {
-        scanf("%d", &queries[i]);
+        if (scanf("%d", &queries[i]) != 1) {
+            printf("Ошибка ввода числа\n");
+            free(queries);
+            return 1;
+        }
+        if (queries[i] <= 0) {
+            printf("Ошибка: номер простого числа должен быть положительным\n");
+            free(queries);
+            return 1;
+        }
         if (queries[i] > max_n) {
             max_n = queries[i];
         }
     }
     
     int* primes = find_primes(max_n);
+    if (!primes) {
+        printf("Ошибка: не удалось найти простые числа\n");
+        free(queries);
+        return 1;
+    }
     
-    printf("Вывод: \n");
+    printf("\nРезультаты:\n");
     for (int i = 0; i < T; i++) {
-        printf("%d\n", primes[queries[i] - 1]); // -1 так как индексация с 0
+        printf("%d-е простое число: %d\n", queries[i], primes[queries[i] - 1]);
     }
     
     free(queries);
