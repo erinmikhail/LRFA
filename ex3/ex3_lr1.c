@@ -7,9 +7,8 @@
 void solve_quadratic(double a, double b, double c, double epsilon) {
     printf("Уравнение: (%.2f)x² + (%.2f)x + (%.2f) = 0\n", a, b, c);
     
-    // Проверка на линейное уравнение (a = 0)
+
     if (fabs(a) < epsilon) {
-        // Проверка на вырожденный случай (b = 0)
         if (fabs(b) < epsilon) {
             if (fabs(c) < epsilon) {
                 printf("  Бесконечное количество решений\n");
@@ -26,32 +25,25 @@ void solve_quadratic(double a, double b, double c, double epsilon) {
     double discriminant = b * b - 4 * a * c;
     
     if (fabs(discriminant) < epsilon) {
-        // Один корень
         double x = -b / (2 * a);
         printf("  Один корень: x = %.6f\n", x);
     } else if (discriminant > 0) {
-        // Два корня
         double sqrt_d = sqrt(discriminant);
         double x1 = (-b + sqrt_d) / (2 * a);
         double x2 = (-b - sqrt_d) / (2 * a);
         printf("  Два корня: x1 = %.6f, x2 = %.6f\n", x1, x2);
     } else {
-        // Действительных корней нет
         printf("  Действительных корней нет\n");
     }
 }
 
 void generate_perm(double coef[3], double epsilon){
-// проверка уникальности
     int used[6] = {0};
     int count = 0;
-// перебор
     for (int i = 0; i < 3; i++){
         for (int j = 0; j < 3; j++) {
             for (int k = 0; k < 3; k++) {
-                // Проверяем, что все индексы разные
                 if (i != j && i != k && j != k) {
-                    // Простая проверка на уникальность
                     int is_unique = 1;
                     for (int m = 0; m < count; m++) {
                         if (used[m] == (i * 100 + j * 10 + k)) {

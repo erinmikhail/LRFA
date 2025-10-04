@@ -14,17 +14,17 @@ int* find_primes(int max_count) {
         limit = max_count * 20; 
     }
     
-    // Создаём массив для решета
+
     char* is_prime = (char*)malloc((limit + 1) * sizeof(char));
     int* primes = (int*)malloc(max_count * sizeof(int));
     
-    // Инициализация решета
+
     for (int i = 0; i <= limit; i++) {
         is_prime[i] = 1;
     }
     is_prime[0] = is_prime[1] = 0;
     
-    // Решето Эратосфена
+    
     for (int i = 2; i * i <= limit; i++) {
         if (is_prime[i]) {
             for (int j = i * i; j <= limit; j += i) {
