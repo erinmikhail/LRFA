@@ -53,8 +53,10 @@ const char *const ERROR_LIST[MAX_ERRNO + 1] = {
     "Key was rejected by service", "Owner died", "State not recoverable",
     "Operation not possible due to RF-kill", "Memory page has hardware error"
 };
+
 #else
 #define MAX_ERRNO 0
+
 const char *const ERROR_LIST[MAX_ERRNO + 1] = {"Windows OS"};
 #endif
 

@@ -1,6 +1,5 @@
 #include "include.h"
 
-
 char* int_to_roman(int num) {
     if (num <= 0 || num > 3999) {
         char* result = malloc(2);
@@ -28,7 +27,6 @@ char* int_to_roman(int num) {
     return result;
 }
 
-
 static void generate_fibonacci(unsigned int limit, unsigned int* fib, int* count) {
     fib[0] = 1;
     fib[1] = 2;
@@ -39,7 +37,6 @@ static void generate_fibonacci(unsigned int limit, unsigned int* fib, int* count
         (*count)++;
     }
 }
-
 
 char* zeckendorf_representation(unsigned int num) {
     if (num == 0) {
@@ -70,7 +67,7 @@ char* zeckendorf_representation(unsigned int num) {
     for (int i = 0; i < fib_count; i++) {
         result[pos++] = coefficients[i] + '0';
     }
-    result[pos++] = '1'; // Дополнительная единица в конце
+    result[pos++] = '1';
     result[pos] = '\0';
     
     return result;
@@ -79,7 +76,6 @@ char* zeckendorf_representation(unsigned int num) {
 int is_valid_base(int base) {
     return base >= 2 && base <= 36;
 }
-
 
 char* int_to_base(int num, int base, int uppercase) {
     if (!is_valid_base(base)) base = 10;
@@ -119,7 +115,6 @@ char* int_to_base(int num, int base, int uppercase) {
     
     return result;
 }
-
 
 long long str_to_int_base(const char *str, int base, int uppercase) {
     if (!is_valid_base(base)) base = 10;
@@ -162,7 +157,6 @@ long long str_to_int_base(const char *str, int base, int uppercase) {
     return is_negative ? -result : result;
 }
 
-
 char* byte_to_binary(unsigned char byte) {
     char* result = malloc(9);
     for (int i = 7; i >= 0; i--) {
@@ -171,7 +165,6 @@ char* byte_to_binary(unsigned char byte) {
     result[8] = '\0';
     return result;
 }
-
 
 char* memory_dump_int(int value) {
     unsigned char* bytes = (unsigned char*)&value;
@@ -188,11 +181,9 @@ char* memory_dump_int(int value) {
     return result;
 }
 
-
 char* memory_dump_uint(unsigned int value) {
     return memory_dump_int(*(int*)&value);
 }
-
 
 char* memory_dump_double(double value) {
     unsigned char* bytes = (unsigned char*)&value;
@@ -209,7 +200,6 @@ char* memory_dump_double(double value) {
     return result;
 }
 
-
 char* memory_dump_float(float value) {
     unsigned char* bytes = (unsigned char*)&value;
     char* result = malloc(100);
@@ -225,10 +215,9 @@ char* memory_dump_float(float value) {
     return result;
 }
 
-
 static int process_format_specifier(FILE* stream, char* str, const char** format, va_list* args, int is_sprintf) {
     const char* fmt = *format;
-    fmt++; // Пропускаем '%'
+    fmt++;
     
 
     if (strncmp(fmt, "Ro", 2) == 0) {
@@ -357,7 +346,7 @@ static int process_format_specifier(FILE* stream, char* str, const char** format
         return len;
     }
     else if (strncmp(fmt, "mf", 2) == 0) {
-        float num = va_arg(*args, double); 
+        float num = va_arg(*args, double);
         char* dump = memory_dump_float(num);
         int len = strlen(dump);
         if (is_sprintf) {
@@ -402,7 +391,6 @@ int overfprintf(FILE *stream, const char *format, ...) {
     va_end(args);
     return total_chars;
 }
-
 
 int oversprintf(char *str, const char *format, ...) {
     va_list args;

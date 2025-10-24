@@ -236,8 +236,25 @@ static int process_input_specifier(FILE* stream, const char** str, const char** 
         return 1;
     }
     
-    char specifier[3] = { '%', *fmt, '\0' };
-    *format = fmt + 1;
+    char specifier[256];
+    int spec_len = 0;
+    specifier[spec_len++] = '%';
+    
+    while (*fmt && *fmt != 'd' && *fmt != 'i' && *fmt != 'u' && *fmt != 'o' && 
+           *fmt != 'x' && *fmt != 'X' && *fmt != 'f' && *fmt != 'e' && *fmt != 'E' &&
+           *fmt != 'g' && *fmt != 'G' && *fmt != 'c' && *fmt != 's' && *fmt != 'p' &&
+           *fmt != 'n' && *fmt != '%') {
+        specifier[spec_len++] = *fmt++;
+    }
+    
+    if (*fmt) {
+        specifier[spec_len++] = *fmt;
+        specifier[spec_len] = '\0';
+        *format = fmt + 1;
+    } else {
+        specifier[spec_len] = '\0';
+        *format = fmt;
+    }
     
     if (is_sscanf) {
         return vsscanf(*str, specifier, *args);
@@ -256,8 +273,8 @@ int overfscanf(FILE *stream, const char *format, ...) {
     while (*ptr) {
         if (*ptr == '%') {
             int matches = process_input_specifier(stream, NULL, &ptr, &args, 0);
-            if (matches <= 0) break;
-            total_matches += matches;
+            if (matches == EOF) break;
+            if (matches > 0) total_matches += matches;
         } else {
             int c = fgetc(stream);
             if (c == EOF || c != *ptr) {
@@ -286,6 +303,7 @@ int oversscanf(const char *str, const char *format, ...) {
             if (matches <= 0) break;
             total_matches += matches;
         } else {
+            while (*str_ptr == ' ') str_ptr++;
             if (*fmt_ptr != *str_ptr) break;
             fmt_ptr++;
             str_ptr++;

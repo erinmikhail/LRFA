@@ -11,9 +11,9 @@ typedef enum {
 } StatusCode;
 
 StatusCode myMemchr(const void *str, int c, size_t n, void **result);
-StatusCode myMemcmp(const void *str1, const void *str2, size_t n, int *result);
+StatusCode myMemcmp(const void *str1, const void *str2, size_t n, int *result); // сравнение блоко памяти
 StatusCode myMemcpy(void *dest, const void *src, size_t n);
-StatusCode myMemset(void *str, int c, size_t n);
+StatusCode myMemset(void *str, int c, size_t n); //заполнение памяти
 StatusCode myStrncat(char *dest, const char *src, size_t n);
 StatusCode myStrchr(const char *str, int c, char **result);
 StatusCode myStrncmp(const char *str1, const char *str2, size_t n, int *result);
