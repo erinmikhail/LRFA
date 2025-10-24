@@ -1,0 +1,6 @@
+program
+*.exe
+*.out
+*.o
+*~
+*.bak
