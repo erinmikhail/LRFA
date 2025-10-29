@@ -402,7 +402,7 @@ int oversprintf(char *str, const char *format, ...) {
     
     while (*ptr) {
         if (*ptr == '%') {
-            char buffer[1000];
+            char buffer[1024];
             int chars_written = process_format_specifier(NULL, buffer, &ptr, &args, 1);
             strcpy(output_ptr, buffer);
             output_ptr += chars_written;
