@@ -1,118 +1,127 @@
 #include "include.h"
 
-
 bool is_printAble(char c){
     return c != ' ' && c != '\t' && c != '\n' && c != '\r' && c != '\0';
 }
 
-void add_space(char *line, int current_len){
+void add_space(char *line, int current_len) {
     const int target_len = 80;
-    int space_to_add = target_len - current_len;
-
-    if (space_to_add <= 0){
+    
+    if (current_len >= target_len) {
         return;
     }
 
-    int space_count = 0;
-    for (int i = 0; i < current_len; i++){
-        if(line[i] == ' '){
-            space_count++;
+    int word_count = 0;
+    int words_start[256] = {0};
+    int words_end[256] = {0};
+    
+    int in_word = 0;
+    for (int i = 0; i < current_len; i++) {
+        if (is_printAble(line[i])) {
+            if (!in_word) {
+                words_start[word_count] = i;
+                in_word = 1;
+            }
+        } else {
+            if (in_word) {
+                words_end[word_count] = i;
+                word_count++;
+                in_word = 0;
+            }
         }
     }
+    if (in_word) {
+        words_end[word_count] = current_len;
+        word_count++;
+    }
 
-    if (space_count == 0){
+    if (word_count <= 1) {
         return;
     }
 
-    int base_spaces_to_add = space_to_add / space_count;
-    int extra_spaces = space_to_add % space_count;
-    
+    int space_count = word_count - 1;
+    int total_spaces_to_add = target_len - current_len;
+    int spaces_per_gap = total_spaces_to_add / space_count;
+    int extra_spaces = total_spaces_to_add % space_count;
+
     char new_line[512] = {0};
     int new_index = 0;
-    
-    for (int i = 0; i < current_len; i++) {
-        if (new_index >= 511) break;
+
+    for (int i = 0; i < word_count; i++) {
+        int word_len = words_end[i] - words_start[i];
+        for (int j = 0; j < word_len; j++) {
+            new_line[new_index++] = line[words_start[i] + j];
+        }
         
-        new_line[new_index++] = line[i];
-        
-        if (line[i] == ' ') {
-            for (int j = 0; j < base_spaces_to_add; j++) {
-                if (new_index >= 511) break;
+        if (i < word_count - 1) {
+            new_line[new_index++] = ' ';
+            for (int j = 0; j < spaces_per_gap; j++) {
                 new_line[new_index++] = ' ';
             }
             if (extra_spaces > 0) {
-                if (new_index >= 511) break;
                 new_line[new_index++] = ' ';
                 extra_spaces--;
             }
         }
     }
-    
-    new_line[511] = '\0';
+
     strcpy(line, new_line);
 }
 
-void process_line(const char *input_line, FILE *output){
+void process_line(const char *input_line, FILE *output) {
     char line[1024];
     strcpy(line, input_line);
-
+    
     int len = strlen(line);
     if (len > 0 && line[len-1] == '\n') {
         line[len-1] = '\0';
         len--;
     }
 
+    if (len == 0) {
+        fprintf(output, "\n");
+        return;
+    }
+
     if (len <= 80) {
         fprintf(output, "%s\n", line);
         return;
     }
-    
-    char buffer[256];
-    int buffer_len = 0;
-    int pos = 0;
-    
-    while (pos < len) {
-        if (buffer_len < 80 && pos < len) {
-            buffer[buffer_len++] = line[pos++];
-            buffer[buffer_len] = '\0';
-        } else {
-            int break_pos = buffer_len;
-            
-            while (break_pos > 0 && buffer[break_pos] != ' ') {
-                break_pos--;
-            }
-            
-            if (break_pos == 0) {
-                break_pos = buffer_len;
-            }
-            
-            char current_line[256] = {0};
-            strncpy(current_line, buffer, break_pos);
-            current_line[break_pos] = '\0';
-            
-            int next_part_start = break_pos;
-            while (next_part_start < buffer_len && buffer[next_part_start] == ' ') {
-                next_part_start++;
-            }
-            
-            int remaining_len = buffer_len - next_part_start;
-            if (remaining_len > 0) {
-                memmove(buffer, buffer + next_part_start, remaining_len);
-            }
-            buffer_len = remaining_len;
-            buffer[buffer_len] = '\0';
-            
-            int current_len = strlen(current_line);
-            if (current_len < 80) {
-                add_space(current_line, current_len);
-            }
 
-            fprintf(output, "%s\n", current_line);
-        }
-    }
+    int start = 0;
     
-    if (buffer_len > 0) {
-        fprintf(output, "%s\n", buffer);
+    while (start < len) {
+        if (len - start <= 80) {
+            fprintf(output, "%s\n", line + start);
+            break;
+        }
+
+        int end = start + 80;
+        int break_pos = end;
+        
+        while (break_pos > start && line[break_pos] != ' ') {
+            break_pos--;
+        }
+
+        if (break_pos == start) {
+            break_pos = end;
+        }
+
+        char segment[256] = {0};
+        strncpy(segment, line + start, break_pos - start);
+        segment[break_pos - start] = '\0';
+
+        int segment_len = strlen(segment);
+        if (segment_len < 80) {
+            add_space(segment, segment_len);
+        }
+        
+        fprintf(output, "%s\n", segment);
+
+        start = break_pos;
+        while (start < len && line[start] == ' ') {
+            start++;
+        }
     }
 }
 

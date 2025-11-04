@@ -1,9 +1,9 @@
-Это короткая строка.
+This is a short line.
 
-А это очень длинная строка, которая должна быть разбита на несколько строк по восемьдесят символов, потому что она явно превышает установленный лимит и требует правильного форматирования текста.
+And this is a very long string that should be split into several lines of eighty characters each, because it clearly exceeds the set limit and requires proper text formatting.
 
-Еще одна короткая строка для проверки.
+One more short line to check.
 
-И снова очень длинная строка с множеством слов, которая будет разбита на несколько строк по восемьдесят символов с равномерным распределением пробелов между словами для красивого выравнивания текста.
+And again, a very long string with a lot of words, which will be divided into several lines of eighty characters with an even distribution of spaces between words for a beautiful text alignment.
 
-Просто короткая.
+Just a short one.

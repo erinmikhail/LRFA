@@ -29,12 +29,15 @@ void handle_menu_choice(int choice, StudentArray *students, const char *trace_fi
             find_by_first_name(students); 
             break;
         case 4: 
-            find_by_group(students); 
+            find_by_group(students);
             break;
-        case 5: 
-            qsort(students->data, students->size, sizeof(Student), compare_id); 
+        case 5: {
+            int (*f_ptr)(const void *, const void *);
+            f_ptr = &compare_id;
+            qsort(students->data, students->size, sizeof(Student), f_ptr); 
             printf("Отсортировано по ID.\n"); 
             break;
+        }
         case 6: 
             qsort(students->data, students->size, sizeof(Student), compare_last_name); 
             printf("Отсортировано по фамилии.\n"); 

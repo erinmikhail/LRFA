@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -Wpedantic -fsanitize=address
-TARGET = text_formatter
+TARGET = text
 SRC = main.c src.c test.c
 
 all: $(TARGET)
