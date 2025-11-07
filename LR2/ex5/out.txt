@@ -1,0 +1,13 @@
+This is a short line.
+
+And this is a very long string that should be split into several lines of eighty
+characters  each,  because  it clearly exceeds the set limit and requires proper
+text formatting.
+
+One more short line to check.
+
+And  again,  a  very long string with a lot of words, which will be divided into
+several  lines  of eighty characters with an even distribution of spaces between
+words for a beautiful text alignment.
+
+Just a short one.

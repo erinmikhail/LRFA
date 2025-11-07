@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void decimalBase(int number, int r, char* result);
+void decimalBase(int number, int r);
 
 #endif
