@@ -5,6 +5,4 @@
 
 void decimalBase(int number, int r, char* result);
 
-char getDigit(int value);
-
 #endif
