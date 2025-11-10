@@ -9,7 +9,6 @@ void decimalBase(int number, int r){
     }
 
     int base = 1 << r;
-    int bits = 32;
 
     if (number == 0){
         printf("0\n");
@@ -17,8 +16,10 @@ void decimalBase(int number, int r){
     }
 
     unsigned int n;
+    int is_negative = 0;
 
     if (number < 0){
+        is_negative = 1;
         n = (unsigned int)(-number);
         n = ~n;
         n += 1;
@@ -29,22 +30,38 @@ void decimalBase(int number, int r){
     char digits[34];
     int count = 0;
 
-    int total_digits = bits / r;
-    if (bits % r != 0) {
-        total_digits++;
-    }
-
-    for (int i = 0; i < total_digits; i++){
-        int digit = n & (base -1);
-
-        if (digit < 10){
-            digits[count] = '0' + digit;
-        } else {
-            digits[count] = 'A' + (digit - 10);
+    if (is_negative) {
+        int bits = 32;
+        int total_digits = bits / r;
+        if (bits % r != 0) {
+            total_digits++;
         }
 
-        count++;
-        n = n >> r;
+        for (int i = 0; i < total_digits; i++){
+            int digit = n & (base - 1);
+
+            if (digit < 10){
+                digits[count] = '0' + digit;
+            } else {
+                digits[count] = 'A' + (digit - 10);
+            }
+
+            count++;
+            n = n >> r;
+        }
+    } else {
+        while (n > 0){
+            int digit = n & (base - 1);
+
+            if (digit < 10){
+                digits[count] = '0' + digit;
+            } else {
+                digits[count] = 'A' + (digit - 10);
+            }
+
+            count++;
+            n = n >> r;
+        }
     }
 
     int pos = 0;
