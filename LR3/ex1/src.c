@@ -9,17 +9,19 @@ void decimalBase(int number, int r){
     }
 
     int base = 1 << r;
+    int bits = 32;
 
     if (number == 0){
         printf("0\n");
         return;
     }
 
-    int is_mine = 0;
     unsigned int n;
 
     if (number < 0){
         n = (unsigned int)(-number);
+        n = ~n;
+        n += 1;
     } else {
         n = (unsigned int)number;
     }
@@ -27,8 +29,13 @@ void decimalBase(int number, int r){
     char digits[34];
     int count = 0;
 
-    while (n > 0){
-        int digit = n & (base - 1);
+    int total_digits = bits / r;
+    if (bits % r != 0) {
+        total_digits++;
+    }
+
+    for (int i = 0; i < total_digits; i++){
+        int digit = n & (base -1);
 
         if (digit < 10){
             digits[count] = '0' + digit;
@@ -41,11 +48,6 @@ void decimalBase(int number, int r){
     }
 
     int pos = 0;
-
-    if (is_mine) {
-        result[0] = '-';
-        pos = 1;
-    }
 
     for (int i = count - 1; i >= 0; i--){
         result[pos] = digits[i];
