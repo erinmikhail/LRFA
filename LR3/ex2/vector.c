@@ -150,7 +150,7 @@ void delete_at_vector(Vector *v, size_t index) {
 
 VECTOR_TYPE get_at_vector(const Vector *v, size_t index) {
     if (!v || index >= v->size) {
-        return (VECTOR_TYPE)0;
+        return 0;
     }
     return v->data[index];
 }

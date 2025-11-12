@@ -5,15 +5,12 @@
 
 #include "vector.h"
 
-void* copy_void_ptr(void* value) {
-    if (!value) return NULL;
-    int* copy = malloc(sizeof(int));
-    *copy = *(int*)value; 
-    return copy;
+VECTOR_TYPE CopyFunc(VECTOR_TYPE value) {
+    return value;
 }
 
-void delete_void_ptr(void* value) {
-    free(value); 
+void DeleteFunc(VECTOR_TYPE value) {
+    (void)value;
 }
 
 void print_vector(const Vector* vec) {
@@ -71,7 +68,7 @@ int main() {
                 size_t capacity;
                 printf("Enter initial capacity: ");
                 scanf("%zu", &capacity);
-                vec1 = create_vector(capacity, copy_void_ptr, delete_void_ptr);
+                vec1 = create_vector(capacity, CopyFunc, DeleteFunc);
                 initialized1 = 1;
                 printf("Vector created successfully!\n");
                 break;
@@ -150,7 +147,7 @@ int main() {
                     break;
                 }
                 if (!initialized2) {
-                    vec2 = create_vector(1, copy_void_ptr, delete_void_ptr);
+                    vec2 = create_vector(1, CopyFunc, DeleteFunc);
                     initialized2 = 1;
                 }
                 copy_vector(&vec2, &vec1);
