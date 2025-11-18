@@ -53,6 +53,10 @@ void copy_vector(Vector *dest, const Vector *src) {
     if (!dest || !src) {
         return;
     }
+
+    if (dest == src){
+        return;
+    }
     
     erase_vector(dest);
 
