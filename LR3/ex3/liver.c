@@ -15,18 +15,14 @@ int compare_liver_age(const Liver *l1, const Liver *l2){
         return l1->birth_date.tm_year - l2->birth_date.tm_year;
     }
     if (l1->birth_date.tm_mon != l2->birth_date.tm_mon){
-        l1->birth_date.tm_mon - l2->birth_date.tm_mon;
+        return l1->birth_date.tm_mon - l2->birth_date.tm_mon;
     }
     if (l1->birth_date.tm_mday != l2->birth_date.tm_mday){
         return l1->birth_date.tm_mday - l2->birth_date.tm_mday;
     }
 }
 
-int int_valid_liver(const Liver *liver){
-    if (liver->id < 0){
-        return 0;
-    }
-
+int is_valid_liver(const Liver *liver){
     if (strlen(liver->surname) == 0){
         return 0;
     }

@@ -14,7 +14,7 @@ typedef struct{
 } Liver;
 
 void print_liver(const Liver *liver);
-int compare_liver_age(const Liver *l1, const Liver l2);
+int compare_liver_age(const Liver *l1, const Liver *l2);
 int is_valid_liver(const Liver *liver);
 Liver create_liver(unsigned int id, const char* surname, const char* name, 
                    const char* patronymic, struct tm birth_date, char gender, double income);

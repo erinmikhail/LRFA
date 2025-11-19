@@ -13,7 +13,7 @@ LinkedList create_list(void){
 
 void erase_list(LinkedList *list){
     while (list->size > 0){
-        pop_frint_list(list);
+        pop_front_list(list);
     }
 }
 
@@ -24,7 +24,7 @@ void delete_list(LinkedList *list){
 void push_back_list(LinkedList *list, LIST_TYPE value){
     Uzel* new_uzel = (Uzel*)malloc(sizeof(Uzel));
     if (!new_uzel){
-        fprinf(stderr, "Memory allocation failed\n");
+        fprintf(stderr, "Memory allocation failed\n");
         exit(1);
     }
 
@@ -114,7 +114,7 @@ void insert_at_list(LinkedList *list, size_t index, LIST_TYPE  value){
     }
 
     if (index == 0){
-        push_frint_list(list, value);
+        push_front_list(list, value);
         return;
     }
 

@@ -40,7 +40,7 @@ void load_from_file(LinkedList* list, const char* filename) {
 void safe_to_file(const LinkedList *list, const char* filename){
     FILE* file = fopen(filename, "w");
     if (!file){
-        pritnf("error file write");
+        printf("error file write");
         return;
     }
 
@@ -289,7 +289,7 @@ void undo_modification(LinkedList* list, CommandHistory* history){
     }
 
     undo_last_modifications(history, list, n);
-    printf("Undid &d modification\n", n);
+    printf("Undid %d modification\n", n);
 }
 
 
