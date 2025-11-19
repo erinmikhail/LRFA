@@ -219,3 +219,75 @@ void delete_resident(LinkedList *list, CommandHistory* history){
     delete_at_list(list, index);
     printf("resid deletd sucs");
 }
+
+void modify_resident(LinkedList *list, CommandHistory* history){
+    unsigned int id;
+    printf("enter id: ");
+    scanf("%u", &id);
+
+    int index = find_liver_by_id(list, id);
+    if (index == -1) {
+        printf("Resident with ID %u not found\n", id);
+        return;
+    }
+    
+    Liver old_liver = get_at_list(list, index);
+    Liver new_liver = old_liver;
+    
+    printf("Modifying resident: ");
+    print_liver(&old_liver);
+
+        printf("Enter new surname (current: %s): ", new_liver.surname);
+    scanf("%49s", new_liver.surname);
+    
+    printf("Enter new name (current: %s): ", new_liver.name);
+    scanf("%49s", new_liver.name);
+    
+    printf("Enter new patronymic (current: %s): ", new_liver.patronymic);
+    scanf("%49s", new_liver.patronymic);
+    
+    printf("Enter new birth date (day month year) (current: %02d.%02d.%d): ",
+           old_liver.birth_date.tm_mday, old_liver.birth_date.tm_mon + 1, 
+           old_liver.birth_date.tm_year + 1900);
+    scanf("%d %d %d", &new_liver.birth_date.tm_mday, 
+          &new_liver.birth_date.tm_mon, &new_liver.birth_date.tm_year);
+    new_liver.birth_date.tm_mon--;
+    new_liver.birth_date.tm_year -= 1900;
+    
+    printf("Enter new gender (M/W) (current: %c): ", new_liver.gender);
+    scanf(" %c", &new_liver.gender);
+    
+    printf("Enter new income (current: %.2f): ", new_liver.income);
+    scanf("%lf", &new_liver.income);
+    
+    if (!is_valid_liver(&new_liver)) {
+        printf("Invalid liver data\n");
+        return;
+    }
+
+    Modification mod;
+    mod.type = CMD_MODIFY;
+    mod.index = index;
+    mod.old_data = old_liver;
+    mod.new_data = new_liver;
+    add_modification(history, mod);
+
+    delete_at_list(list, index);
+    insert_sorted_by_age(list, new_liver);
+    
+    printf("Resident modified successfully\n");
+}
+
+void undo_modification(LinkedList* list, CommandHistory* history){
+    int n;
+    printf("enter number or modif to undo");
+    scanf("%d", &n);
+
+    if (n > history->current_index){
+        printf("only %d modif avaibl to undo\n", history->current_index);
+        n = history->current_index;
+    }
+
+    undo_last_modifications(history, list, n);
+    printf("Undid &d modification\n", n);
+}
