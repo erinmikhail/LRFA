@@ -87,7 +87,7 @@ LIST_TYPE pop_back_list(LinkedList *list){
 
 LIST_TYPE pop_front_list(LinkedList *list){
     if (list->size == 0){
-        fprintf(stderr, "List is empty");
+        fprintf(stderr, "List is empty\n");
         exit(1);
     }
 
@@ -105,5 +105,56 @@ LIST_TYPE pop_front_list(LinkedList *list){
     free(first_uzel);
     list->size--;
     return value;
+}
+
+void insert_at_list(LinkedList *list, size_t index, LIST_TYPE  value){
+    if (index > list->size){
+        fprintf(stderr, "Index out of bounds\n");
+        return;
+    }
+
+    if (index == 0){
+        push_frint_list(list, value);
+        return;
+    }
+
+    if (index == list->size){
+        push_front_list(list,value);
+        return;
+    }
+
+    Uzel* current = list->head;
+    for (size_t i = 0; i < index; i ++){
+        current = current->next;
+    }
+
+    Uzel *new_uzel = (Uzel*)malloc(sizeof(Uzel));
+    if (!new_uzel){
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(1);
+    }
+
+    new_uzel->data = value;
+    new_uzel->prev = current->prev;
+    new_uzel->next = current;
+
+    current->prev->next = new_uzel;
+    current->prev = new_uzel;
+
+    list->size++;
+}
+
+LIST_TYPE get_at_list(const LinkedList* list, size_t index) {
+    if (index >= list->size) {
+        fprintf(stderr, "Index out of bounds\n");
+        exit(1);
+    }
+    
+    Uzel* current = list->head;
+    for (size_t i = 0; i < index; i++) {
+        current = current->next;
+    }
+    
+    return current->data;
 }
 
