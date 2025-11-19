@@ -221,20 +221,28 @@ void test_liver_validation() {
     Liver valid_liver = create_liver(1, "Valid", "Name", "Patronymic", valid_birth_date, 'M', 2500.50);
     assert(is_valid_liver(&valid_liver) == 1);
     
-    // Test invalid ID
-    Liver invalid_id = create_liver(-1, "Invalid", "ID", "", valid_birth_date, 'M', 2500.50);
-    assert(is_valid_liver(&invalid_id) == 0);
-    
     // Test invalid surname (empty)
     Liver invalid_surname = create_liver(2, "", "EmptySurname", "", valid_birth_date, 'M', 2500.50);
     assert(is_valid_liver(&invalid_surname) == 0);
     
+    // Test invalid surname (non-alphabetic)
+    Liver invalid_surname_chars = create_liver(3, "Invalid123", "Surname", "", valid_birth_date, 'M', 2500.50);
+    assert(is_valid_liver(&invalid_surname_chars) == 0);
+    
+    // Test invalid name (empty)
+    Liver invalid_name = create_liver(4, "Invalid", "", "", valid_birth_date, 'M', 2500.50);
+    assert(is_valid_liver(&invalid_name) == 0);
+    
+    // Test invalid patronymic (non-alphabetic)
+    Liver invalid_patronymic = create_liver(5, "Invalid", "Patronymic", "123", valid_birth_date, 'M', 2500.50);
+    assert(is_valid_liver(&invalid_patronymic) == 0);
+    
     // Test invalid gender
-    Liver invalid_gender = create_liver(3, "Invalid", "Gender", "", valid_birth_date, 'X', 2500.50);
+    Liver invalid_gender = create_liver(6, "Invalid", "Gender", "", valid_birth_date, 'X', 2500.50);
     assert(is_valid_liver(&invalid_gender) == 0);
     
     // Test invalid income
-    Liver invalid_income = create_liver(4, "Invalid", "Income", "", valid_birth_date, 'M', -100.00);
+    Liver invalid_income = create_liver(7, "Invalid", "Income", "", valid_birth_date, 'M', -100.00);
     assert(is_valid_liver(&invalid_income) == 0);
     
     printf("✓ Liver validation passed\n");

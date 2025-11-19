@@ -1,0 +1,12 @@
+1 Smith John Michael 15 5 1980 M 2500.50
+2 Johnson Mary Ann 22 8 1975 W 3200.75
+3 Brown Robert James 10 12 1990 M 1800.00
+4 Davis Sarah 3 3 1985 W 2750.25
+5 Wilson David 30 7 1978 M 4100.80
+6 Miller Jennifer Lynn 14 9 1992 W 2900.40
+7 Anderson Mark William 25 1 1982 M 3500.60
+8 Thomas Lisa Marie 8 11 1988 W 2650.30
+9 Jackson Steven Paul 19 6 1970 M 4800.90
+10 White Emily Grace 12 4 1995 W 2200.70
+11 Harris Daniel Scott 5 2 1983 M 3800.45
+12 Martin Jessica Rose 28 10 1987 W 3100.85
