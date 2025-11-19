@@ -215,3 +215,26 @@ LIST_TYPE peek_queue(const LinkedList *queue){
     return queue->head->data;
 }
 
+void insert_sorted_by_age(LinkedList *list, LIST_TYPE value){
+    if (list->size == 0){
+        push_back_list(list, value);
+        return;
+    }
+
+    Uzel *current = list->head;
+    size_t index = 0;
+
+    while (current){
+        if (compare_liver_age(&value, current->data) <= 0){
+            insert_at_list(list, index, value);
+            return;
+        }
+
+        current = current->next;
+        index++;
+    }
+
+    push_back_list(list, value);
+}
+
+int find_liver_by_id(){}
