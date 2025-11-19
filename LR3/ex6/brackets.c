@@ -35,3 +35,28 @@ int is_matching_pair(char open, char close){
     return 0;
 }
 
+int check_brackets(const char *str){
+    Stack stack;
+    init_stack(&stack);
+
+    for (int i = 0; str[i] != '\0'; i++){
+        char c = str[i];
+
+        if (is_open_brackets(c)){
+            push(&stack, c);
+        }
+
+        else if (is_close_bracket(c)){
+            if(is_empty(&stack)){
+                return 0;
+            }
+
+            char last = pop(&stack);
+            if (!is_matching_pair(last, c)){
+                return 0;
+            }
+        }
+    }
+
+    return is_empty(&stack);
+}
