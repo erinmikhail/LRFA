@@ -158,3 +158,26 @@ LIST_TYPE get_at_list(const LinkedList* list, size_t index) {
     return current->data;
 }
 
+void delete_at_list(LinkedList *list, size_t index){
+    if (index >= list->size){
+        fprintf(stderr, "index out of bounds\n");
+        return;
+    }
+
+    if (index == 0){
+        pop_front_list(list);
+        return;
+    }
+
+    Uzel* current = list->head;
+    for (size_t i = 0; i < index; i++){
+        current = current->next;
+    }
+
+    current->prev->next = current->next;
+    current->next->prev = current->prev;
+
+    free(current);
+    list->size--;
+}
+
