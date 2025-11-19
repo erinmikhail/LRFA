@@ -62,3 +62,48 @@ void push_front_list(LinkedList* list, LIST_TYPE value) {
     list->head = new_uzel;
     list->size++;
 }
+
+LIST_TYPE pop_back_list(LinkedList *list){
+    if (list->size == 0){
+        fprintf(stderr, "List is empty");
+        exit(1);
+    }
+    
+    Uzel *last_uzel = list->tail;
+    LIST_TYPE value = last_uzel->data;
+
+    if (list->head == list->tail){
+        list->head = NULL;
+        list->tail = NULL;
+    } else {
+        list->tail = last_uzel->prev;
+        list->tail->next = NULL;
+    }
+
+    free(last_uzel);
+    list->size--;
+    return value;
+}
+
+LIST_TYPE pop_front_list(LinkedList *list){
+    if (list->size == 0){
+        fprintf(stderr, "List is empty");
+        exit(1);
+    }
+
+    Uzel *first_uzel = list->head;
+    LIST_TYPE value = first_uzel->data;
+
+    if (list->head == list->tail){
+        list->head = NULL;
+        list->tail = NULL;
+    } else {
+        list->head = first_uzel->next;
+        list->head->prev = NULL;
+    }
+
+    free(first_uzel);
+    list->size--;
+    return value;
+}
+
