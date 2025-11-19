@@ -42,7 +42,7 @@ int check_brackets(const char *str){
     for (int i = 0; str[i] != '\0'; i++){
         char c = str[i];
 
-        if (is_open_brackets(c)){
+        if (is_open_bracket(c)){
             push(&stack, c);
         }
 
