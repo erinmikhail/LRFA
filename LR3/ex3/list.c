@@ -16,3 +16,49 @@ void erase_list(LinkedList *list){
         pop_frint_list(list);
     }
 }
+
+void delete_list(LinkedList *list){
+    erase_list(list);
+}
+
+void push_back_list(LinkedList *list, LIST_TYPE value){
+    Uzel* new_uzel = (Uzel*)malloc(sizeof(Uzel));
+    if (!new_uzel){
+        fprinf(stderr, "Memory allocation failed\n");
+        exit(1);
+    }
+
+    new_uzel->data = value;
+    new_uzel->next = NULL;
+    new_uzel->prev = list->tail;
+
+    if (list->tail){
+        list->tail->next = new_uzel;
+    } else {
+        list->head = new_uzel;
+    }
+
+    list->tail = new_uzel;
+    list->size++;
+}
+
+void push_front_list(LinkedList* list, LIST_TYPE value) {
+    Uzel* new_uzel = (Uzel*)malloc(sizeof(Uzel));
+    if (!new_uzel) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(1);
+    }
+    
+    new_uzel->data = value;
+    new_uzel->prev = NULL;
+    new_uzel->next = list->head;
+    
+    if (list->head) {
+        list->head->prev = new_uzel;
+    } else {
+        list->tail = new_uzel;
+    }
+    
+    list->head = new_uzel;
+    list->size++;
+}
