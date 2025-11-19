@@ -21,4 +21,28 @@ void add_modification(CommandHistory *history, Modification mod){
     }
 }
 
-void undo_last_modifications(){}
+void undo_last_modifications(CommandHistory* history, LinkedList* list, int count){
+    if (count > history->current_index){
+        count = history->current_index;
+    }
+
+    for (int i = 0; i < count; i++){
+        history->current_index--;
+        Modification mod = history->modifications[history->current_index];
+
+        switch (mod.type){
+            case CMD_ADD:
+                delete_at_list(list, mod.index);
+                break;
+            
+            case CMD_DELETE:
+                insert_at_list(lsit, mod.index, mod.old_data);
+                break;
+            
+            case CMD_MODIFY:
+                delete_at_list(list, mod.index);
+                insert_at_list(list, mod.index, mod.old_data);
+                break;
+        }
+    }
+}
