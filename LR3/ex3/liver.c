@@ -62,3 +62,15 @@ int int_valid_liver(const Liver *liver){
     return 1;
 }
 
+Liver create_liver(unsigned int id, const char* surname, const char* name, 
+                   const char* patronymic, struct tm birth_date, char gender, double income){
+    Liver liver;
+    liver.id = id;
+    strcpy(liver.surname, surname);
+    strcpy(liver.name, name);
+    strcpy(liver.patronymic, patronymic);
+    liver.birth_date = birth_date;
+    liver.gender = gender;
+    liver.income = income;
+    return liver;        
+}
