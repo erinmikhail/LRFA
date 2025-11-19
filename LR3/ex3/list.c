@@ -225,7 +225,7 @@ void insert_sorted_by_age(LinkedList *list, LIST_TYPE value){
     size_t index = 0;
 
     while (current){
-        if (compare_liver_age(&value, current->data) <= 0){
+        if (compare_liver_age(&value, &current->data) <= 0){
             insert_at_list(list, index, value);
             return;
         }

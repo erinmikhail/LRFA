@@ -204,7 +204,7 @@ void delete_resident(LinkedList *list, CommandHistory* history){
 
     int index = find_liver_by_id(list, id);
     if (index == -1) {
-        pritnf("resid with ID not found\n");
+        printf("resid with ID not found\n");
         return;
     }
 
@@ -278,18 +278,31 @@ void modify_resident(LinkedList *list, CommandHistory* history){
     printf("Resident modified successfully\n");
 }
 
-void undo_modification(LinkedList* list, CommandHistory* history){
-    int n;
-    printf("enter number or modif to undo");
-    scanf("%d", &n);
-
-    if (n > history->current_index){
-        printf("only %d modif avaibl to undo\n", history->current_index);
-        n = history->current_index;
+void undo_modifications(CommandHistory* history, LinkedList* list, int count){
+    if (count > history->current_index){
+        count = history->current_index;
     }
 
-    undo_last_modifications(history, list, n);
-    printf("Undid %d modification\n", n);
+    for (int i = 0; i < count; i++){
+        history->current_index--;
+        Modification mod = history->modifications[history->current_index];
+
+        switch (mod.type){
+            case CMD_ADD:
+                delete_at_list(list, mod.index);
+                break;
+            
+            case CMD_DELETE:
+                insert_at_list(list, mod.index, mod.old_data);
+                break;
+            
+            case CMD_MODIFY:
+                delete_at_list(list, mod.index);
+                insert_at_list(list, mod.index, mod.old_data);
+                break;
+        }
+    }
+    printf("Undid %d modifications\n", count);
 }
 
 
@@ -329,7 +342,7 @@ int main() {
             case 2:
                 printf("Enter filename: ");
                 scanf("%99s", filename);
-                save_to_file(&list, filename);
+                safe_to_file(&list, filename);
                 break;
                 
             case 3:
@@ -353,7 +366,7 @@ int main() {
                 break;
                 
             case 8:
-                undo_modifications(&list, &history);
+                undo_modifications(&history, &list, 1);
                 break;
                 
             case 9:
