@@ -10,3 +10,15 @@ void print_liver(const Liver *liver){
            liver->birth_date.tm_year + 1900, liver->gender, liver->income);
 }
 
+int compare_liver_age(const Liver *l1, const Liver *l2){
+    if(l1->birth_date.tm_year != l2->birth_date.tm_year){
+        return l1->birth_date.tm_year - l2->birth_date.tm_year;
+    }
+    if (l1->birth_date.tm_mon != l2->birth_date.tm_mon){
+        l1->birth_date.tm_mon - l2->birth_date.tm_mon;
+    }
+    if (l1->birth_date.tm_mday != l2->birth_date.tm_mday){
+        return l1->birth_date.tm_mday - l2->birth_date.tm_mday;
+    }
+}
+
