@@ -22,3 +22,43 @@ int compare_liver_age(const Liver *l1, const Liver *l2){
     }
 }
 
+int int_valid_liver(const Liver *liver){
+    if (liver->id < 0){
+        return 0;
+    }
+
+    if (strlen(liver->surname) == 0){
+        return 0;
+    }
+    for (int i = 0; liver->surname[i]; i++){
+        if(!isalpha(liver->surname[i])){
+            return 0;
+        }
+    }
+
+     if (strlen(liver->name) == 0){
+        return 0;
+    }
+    for (int i = 0; liver->name[i]; i++){
+        if(!isalpha(liver->name[i])){
+            return 0;
+        }
+    }
+
+        for (int i = 0; liver->patronymic[i]; i++){
+        if(!isalpha(liver->patronymic[i])){
+            return 0;
+        }
+    }
+
+    if (liver->gender != 'M' && liver->gender != 'W'){
+        return 0;
+    }
+
+    if (liver->income < 0){
+        return 0;
+    }
+
+    return 1;
+}
+
