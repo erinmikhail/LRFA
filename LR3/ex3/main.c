@@ -37,5 +37,26 @@ void load_from_file(LinkedList* list, const char* filename) {
 }
 
 
+void safe_to_file(const LinkedList *list, const char* filename){
+    FILE* file = fopen(filename, "w");
+    if (!file){
+        pritnf("error file write");
+        return;
+    }
 
+    Uzel* current = list->head;
+    while (current) {
+        Liver* liver = &current->data;
+        fprintf(file, "%u %s %s %s %d %d %d %c %.2f\n",
+                liver->id, liver->surname, liver->name, liver->patronymic,
+                liver->birth_date.tm_mday, liver->birth_date.tm_mon + 1, 
+                liver->birth_date.tm_year + 1900, liver->gender, liver->income);
+        
+        current = current->next;
+    }
+
+    fclose(file);
+}
+
+void search_resident(const LinkedList* list){}
 
