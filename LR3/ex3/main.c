@@ -279,30 +279,21 @@ void modify_resident(LinkedList *list, CommandHistory* history){
 }
 
 void undo_modifications(CommandHistory* history, LinkedList* list, int count){
-    if (count > history->current_index){
-        count = history->current_index;
-    }
+    int total_modifications = history->current_index;
 
-    for (int i = 0; i < count; i++){
-        history->current_index--;
-        Modification mod = history->modifications[history->current_index];
-
-        switch (mod.type){
-            case CMD_ADD:
-                delete_at_list(list, mod.index);
-                break;
-            
-            case CMD_DELETE:
-                insert_at_list(list, mod.index, mod.old_data);
-                break;
-            
-            case CMD_MODIFY:
-                delete_at_list(list, mod.index);
-                insert_at_list(list, mod.index, mod.old_data);
-                break;
-        }
+    if (total_modifications == 0) {
+        printf("No modifications to undo\n");
+        return;
     }
-    printf("Undid %d modifications\n", count);
+    
+    int undo_count = total_modifications / 2;
+    printf("Total modifications: %d\n", total_modifications);
+    printf("Undoing %d modifications...\n", undo_count);
+    
+    undo_last_modifications(history, list, undo_count);
+    
+    printf("Successfully undone %d modifications\n", undo_count);
+
 }
 
 
@@ -366,7 +357,7 @@ int main() {
                 break;
                 
             case 8:
-                undo_modifications(&history, &list, 1);
+                undo_modifications(&history, &list);
                 break;
                 
             case 9:
