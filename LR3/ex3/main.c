@@ -148,5 +148,74 @@ void search_resident(const LinkedList* list){
     if (!found){
         printf("no result\n");
     }
+
+
 }
 
+
+void add_resident(LinkedList* list, CommandHistory* history) {
+    Liver liver;
+    struct tm birth_date = {0};
+    
+    printf("Enter ID: ");
+    scanf("%u", &liver.id);
+    
+    printf("Enter surname: ");
+    scanf("%49s", liver.surname);
+    
+    printf("Enter name: ");
+    scanf("%49s", liver.name);
+    
+    printf("Enter patronymic: ");
+    scanf("%49s", liver.patronymic);
+    
+    printf("Enter birth date (day month year): ");
+    scanf("%d %d %d", &birth_date.tm_mday, &birth_date.tm_mon, &birth_date.tm_year);
+    birth_date.tm_mon--; 
+    birth_date.tm_year -= 1900; 
+    liver.birth_date = birth_date;
+    
+    printf("Enter gender (M/W): ");
+    scanf(" %c", &liver.gender);
+    
+    printf("Enter income: ");
+    scanf("%lf", &liver.income);
+    
+    if (!is_valid_liver(&liver)) {
+        printf("Invalid liver data\n");
+        return;
+    }
+    
+    Modification mod;
+    mod.type = CMD_ADD;
+    mod.index = list->size; 
+    mod.new_data = liver;
+    add_modification(history, mod);
+    
+    insert_sorted_by_age(list, liver);
+    printf("Resident added successfully\n");
+}
+
+
+void delete_resident(LinkedList *list, CommandHistory* history){
+    unsigned int id;
+    printf("Enter ID resid delete ");
+    scanf("%u", &id);
+
+    int index = find_liver_by_id(list, id);
+    if (index == -1) {
+        pritnf("resid with ID not found\n");
+        return;
+    }
+
+    Liver liver = get_at_list(list, index);
+
+    Modification mod;
+    mod.type = CMD_DELETE;
+    mod.index = index;
+    mod.old_data = liver;
+    add_modification(history, mod);
+
+    delete_at_list(list, index);
+    printf("resid deletd sucs");
+}
