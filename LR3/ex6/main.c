@@ -2,20 +2,14 @@
 #include "brackets.h"
 
 int main() {
-    const char *test[] = {
-        "(a + b)",
-        "([{<>}])",
-        "((())",
-        "())", 
-        "([)]",
-        "a + b",
-        ""
-    };
+    char expression[1000];
 
-    for (int i = 0; i < 7; i++){
-        printf("Строка: \"%s\"\n", test[i]);
-        printf("рез: %s\n\n", check_brackets(test[i]) ? "OK" : "ERROR");
+    printf("введите выражениеЖ ");
+    scanf("%s", expression);
+
+    if (check_brackets(expression)){
+        printf("все гуд\n");
+    } else{
+        printf("Все хреново\n");
     }
-
-    return 0;
 }
