@@ -278,7 +278,7 @@ void modify_resident(LinkedList *list, CommandHistory* history){
     printf("Resident modified successfully\n");
 }
 
-void undo_modifications(CommandHistory* history, LinkedList* list, int count){
+void undo_modifications(CommandHistory* history, LinkedList* list){
     int total_modifications = history->current_index;
 
     if (total_modifications == 0) {
