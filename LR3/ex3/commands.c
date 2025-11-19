@@ -36,7 +36,7 @@ void undo_last_modifications(CommandHistory* history, LinkedList* list, int coun
                 break;
             
             case CMD_DELETE:
-                insert_at_list(lsit, mod.index, mod.old_data);
+                insert_at_list(list, mod.index, mod.old_data);
                 break;
             
             case CMD_MODIFY:
