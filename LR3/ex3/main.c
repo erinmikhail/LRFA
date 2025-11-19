@@ -291,3 +291,98 @@ void undo_modification(LinkedList* list, CommandHistory* history){
     undo_last_modifications(history, list, n);
     printf("Undid &d modification\n", n);
 }
+
+
+int main() {
+    LinkedList list = create_list();
+    CommandHistory history;
+    init_command_history(&history);
+    
+    char filename[100];
+    int choice;
+    
+    printf("Resident Management System\n");
+    
+    do {
+        printf("\nMenu:\n");
+        printf("1. Load from file\n");
+        printf("2. Save to file\n");
+        printf("3. Display all residents\n");
+        printf("4. Search resident\n");
+        printf("5. Add resident\n");
+        printf("6. Modify resident\n");
+        printf("7. Delete resident\n");
+        printf("8. Undo modifications\n");
+        printf("9. Test stack operations\n");
+        printf("10. Test queue operations\n");
+        printf("0. Exit\n");
+        printf("Choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                printf("Enter filename: ");
+                scanf("%99s", filename);
+                load_from_file(&list, filename);
+                break;
+                
+            case 2:
+                printf("Enter filename: ");
+                scanf("%99s", filename);
+                save_to_file(&list, filename);
+                break;
+                
+            case 3:
+                print_list(&list);
+                break;
+                
+            case 4:
+                search_resident(&list);
+                break;
+                
+            case 5:
+                add_resident(&list, &history);
+                break;
+                
+            case 6:
+                modify_resident(&list, &history);
+                break;
+                
+            case 7:
+                delete_resident(&list, &history);
+                break;
+                
+            case 8:
+                undo_modifications(&list, &history);
+                break;
+                
+            case 9:
+                printf("Testing stack operations...\n");
+                if (list.size > 0) {
+                    Liver top = peek_stack(&list);
+                    printf("Top of stack: ");
+                    print_liver(&top);
+                }
+                break;
+                
+            case 10:
+                printf("Testing queue operations...\n");
+                if (list.size > 0) {
+                    Liver front = peek_queue(&list);
+                    printf("Front of queue: ");
+                    print_liver(&front);
+                }
+                break;
+                
+            case 0:
+                printf("Exiting...\n");
+                break;
+                
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 0);
+    
+    delete_list(&list);
+    return 0;
+}
