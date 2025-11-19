@@ -277,8 +277,8 @@ int is_equal_list(const LinkedList* l1, const LinkedList* l2) {
         if (memcmp(&uzel1->data, &uzel2->data, sizeof(LIST_TYPE)) != 0) {
             return 0;
         }
-        uzel1 = node1->next;
-        uzel2 = node2->next;
+        uzel1 = uzel1->next;
+        uzel2 = uzel2->next;
     }
     
     return 1;
