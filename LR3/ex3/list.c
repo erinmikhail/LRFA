@@ -181,3 +181,37 @@ void delete_at_list(LinkedList *list, size_t index){
     list->size--;
 }
 
+void push_stack(LinkedList *stack, LIST_TYPE value){
+    push_back_list(stack, value);
+}
+
+LIST_TYPE pop_stack(LinkedList *stack){
+    return pop_back_list(stack);
+}
+
+LIST_TYPE peek_stack(const LinkedList *stack){
+    if (stack->size == 0){
+        fprintf(stderr, "stack is empty\n");
+        exit(1);
+    }
+
+    return stack->tail->data;
+}
+
+void enqueue(LinkedList *queue, LIST_TYPE value){
+    push_back_list(queue, value);
+}
+
+LIST_TYPE dequeue(LinkedList *queue){
+    return pop_front_list(queue);
+}
+
+LIST_TYPE peek_queue(const LinkedList *queue){
+    if (queue->size == 0){
+        fprintf(stderr, "queue is empty\n");
+        exit(1);
+    }
+
+    return queue->head->data;
+}
+
