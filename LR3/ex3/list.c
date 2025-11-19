@@ -237,4 +237,49 @@ void insert_sorted_by_age(LinkedList *list, LIST_TYPE value){
     push_back_list(list, value);
 }
 
-int find_liver_by_id(){}
+int find_liver_by_id(const LinkedList* list, unsigned int id) {
+    Uzel* current = list->head;
+    int index = 0;
+    
+    while (current) {
+        if (current->data.id == id) {
+            return index;
+        }
+        current = current->next;
+        index++;
+    }
+    
+    return -1;
+}
+
+
+void print_list(const LinkedList* list) {
+    printf("List size: %zu\n", list->size);
+    Uzel* current = list->head;
+    int index = 0;
+    
+    while (current) {
+        printf("[%d] ", index++);
+        print_liver(&current->data);
+        current = current->next;
+    }
+}
+
+int is_equal_list(const LinkedList* l1, const LinkedList* l2) {
+    if (l1->size != l2->size) {
+        return 0;
+    }
+    
+    Uzel* uzel1 = l1->head;
+    Uzel* uzel2 = l2->head;
+    
+    while (uzel1 && uzel2) {
+        if (memcmp(&uzel1->data, &uzel2->data, sizeof(LIST_TYPE)) != 0) {
+            return 0;
+        }
+        uzel1 = node1->next;
+        uzel2 = node2->next;
+    }
+    
+    return 1;
+}
