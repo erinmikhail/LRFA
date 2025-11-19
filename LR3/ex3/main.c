@@ -58,5 +58,95 @@ void safe_to_file(const LinkedList *list, const char* filename){
     fclose(file);
 }
 
-void search_resident(const LinkedList* list){}
+void search_resident(const LinkedList* list){
+    printf("Search by:\n");
+    printf("1. ID\n");
+    printf("2. Surname\n");
+    printf("3. Gender\n");
+    printf("4. Income range\n");
+
+    int choice;
+    scanf("%d", &choice);
+
+    Uzel* current = list->head;
+    int found = 0;
+
+    switch (choice){
+        case 1: {
+            unsigned int id;
+            printf("Enter ID; ");
+            scanf("%u", &id);
+
+            while (current){
+                if (current->data.id == id){
+                    print_liver(&current->data);
+                    found = 1;
+                }
+
+                current = current->next;
+            }
+
+            break;
+        }
+
+        case 2: {
+            char surname[50];
+            printf("Enter surname: ");
+            scanf("%49s", surname);
+
+            while (current){
+                if (strcmp(current->data.surname, surname) == 0){
+                    print_liver(&current->data);
+                    found = 1;
+                }
+
+                current = current->next;
+            }
+
+            break;
+        }
+
+        case 3: {
+              char gender;
+            printf("Enter gender (M/W): ");
+            scanf("%c", &gender);
+            
+            while (current) {
+                if (current->data.gender == gender) {
+                    print_liver(&current->data);
+                    found = 1;
+                }
+
+                current = current->next;
+            }
+
+            break;
+        }
+
+        case 4: {
+            double exact_income;
+            printf("Enter income ");
+            scanf("%lf", &exact_income);
+
+            while (current) {
+                if (current->data.income == exact_income){
+                    print_liver(&current->data);
+                    found = 1;
+                }
+
+                current = current->next;
+            }
+
+            break;
+        }
+
+        default:
+            printf("invalid choice\n");
+            return;
+    }
+
+    if (!found){
+        printf("no result\n");
+    }
+}
 
