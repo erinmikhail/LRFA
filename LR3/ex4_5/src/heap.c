@@ -83,3 +83,22 @@ void heapify_down(Heap *h, int index){
     }
 }
 
+int push_heap(Heap *h, int value){
+    if (h->size >= h->capacity){
+        size_t new_capacity = h ->capacity * 2;
+        int *new_data = (int*)realloc(h->data, new_capacity * sizeof(int));
+        if (!new_data){
+            fprintf(stderr, "Heap realloc failed\n");
+            return 0;
+        }
+
+        h->data = new_data;
+        h->capacity = new_capacity;
+    }
+
+    h->data[h->size] = value;
+    heapify_up(h, (int)h->size);
+    h->size++;
+    return 1;
+}
+
