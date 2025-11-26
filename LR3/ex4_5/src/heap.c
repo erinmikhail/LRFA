@@ -41,3 +41,21 @@ int peek_heap(const Heap *h){
     }
     return h->data[0];
 }
+
+void swap(int *a, int *b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void heapify_up(Heap *h, int index){
+    while (index > 0){
+        int parent = (index -1) / 2;
+        if (h->data[parent] <= h->data[index]){
+            break;
+        }
+        swap(&h->data[parent], &h->data[index]);
+        index = parent;
+    }
+}
+
