@@ -59,3 +59,27 @@ void heapify_up(Heap *h, int index){
     }
 }
 
+void heapify_down(Heap *h, int index){
+    int size = h->size;
+    while (1){
+        int left = 2 * index + 1;
+        int right = 2 * index + 2;
+        int smallest = index;
+
+        if (left < size && h->data[left] < h->data[smallest]){
+            smallest = left;
+        }
+
+        if (right < size && h->data[right] < h->data[smallest]){
+            smallest = right;
+        }
+
+        if (smallest == index){
+            break;
+        }
+
+        swap(&h->data[index], &h->data[smallest]);
+        index = smallest;
+    }
+}
+
