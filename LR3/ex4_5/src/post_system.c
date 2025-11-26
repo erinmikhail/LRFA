@@ -38,5 +38,14 @@ void delete_post_system(PostSystem *system){
         return;
     }
 
-    log_event(system)
+    log_event(system, "Post system shutdown\n");
+
+    for (int i = 0; i < system->office_count; i++){
+        delete_heap(&system->offices[i].letter_queue);
+        free(system->offices[i].connected_ids);
+    }
+
+    free(system->offices);
+    free(system->letters);
+    free(system);
 }
