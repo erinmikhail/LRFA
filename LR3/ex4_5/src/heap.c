@@ -135,7 +135,7 @@ int is_equal_heap(const Heap *h1, const Heap *h2){
 
 Heap build_heap(const int *array, size_t n){
     Heap h = create_heap(n);
-    if (h->data == NULL){
+    if (h.data == NULL){
         return h;
     }
 
