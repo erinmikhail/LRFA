@@ -49,3 +49,20 @@ void delete_post_system(PostSystem *system){
     free(system->letters);
     free(system);
 }
+
+void log_event(const PostSystem *system, const char *message){
+    if (!system){
+        return;
+    }
+
+    FILE *log_file = fopen(system->log_filename, "a");
+    if (log_file){
+        time_t now = time(NULL);
+        char *time_str = ctime(&now);
+        time_str[strlen(time_str) - 1] = '\0';
+
+        fprintf(log_file, "[%s] %s\n", time_str, message);
+        fclose(log_file);
+    }
+}
+
