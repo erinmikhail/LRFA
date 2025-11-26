@@ -102,3 +102,27 @@ int push_heap(Heap *h, int value){
     return 1;
 }
 
+int pop_heap(Heap *h){
+    if(is_empty_heap(h)){
+        fprintf(stderr, "empty heap\n");
+        return -1;
+    }
+
+    int result = h->data[0];
+    h->size--;
+
+    if (h->size > 0){
+        h->data[0] = h->data[h->size];
+        heapify_down(h,0);
+    }
+
+    return result;
+}
+
+int is_equal_heap(const Heap *h1, const Heap *h2){
+    if (h1->size != h2->size){
+        return 0;
+    }
+
+    
+}
