@@ -16,3 +16,28 @@ Heap create_heap(size_t initial_capacity) {
     h.capacity = initial_capacity;
     return h;
 }
+
+void delete_heap(Heap *h){
+    if (h && h->data){
+        free(h->data);
+        h->data = NULL;
+        h->size = 0;
+        h->capacity = 0;
+    }
+}
+
+int is_empty_heap(const Heap *h){
+    return h == NULL || h->size == 0;
+}
+
+size_t size_heap(const Heap *h){
+    return h ? h->size : 0;
+}
+
+int peek_heap(const Heap *h){
+    if (is_empty_heap(h)){
+        fprintf(stderr, "Heap id empty\n");
+        return -1;
+    }
+    return h->data[0];
+}
