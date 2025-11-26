@@ -124,5 +124,27 @@ int is_equal_heap(const Heap *h1, const Heap *h2){
         return 0;
     }
 
-    
+    for (size_t i = 0; i < h1->size; i++){
+        if (h1->data[i] != h2->data[i]){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+Heap build_heap(const int *array, size_t n){
+    Heap h = create_heap(n);
+    if (h->data == NULL){
+        return h;
+    }
+
+    memcpy(h.data, array, n * sizeof(int));
+    h.size = n;
+
+    for (int i = (int)n / 2 - 1; i >= 0; i--){
+        heapify_down(&h,i);
+    }
+
+    return h;
 }
