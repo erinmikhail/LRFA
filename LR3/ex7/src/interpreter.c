@@ -213,4 +213,45 @@ static int parse_factor(Parser* parser){
     return 0;
 }
 
+int execute_line(const char* input, char* operation_desc){
+    Parser parser;
+    parser_init(&parser, input);
+    parser.current_token = get_next_token(&parser);
 
+    if (parser.current_token.type == TOKEN_VARIABLE){
+        char var_name = parser.current_token.variable;
+        parser.current_token = get_next_token(&parser);
+
+        if (parser.current_token.type == TOKEN_OPERATOR && parser.current_token.op == '='){
+            parser.current_token = get_next_token(&parser);
+            int value = parse_expression(&parser);
+            set_variable_value(var_name, value);
+            strcpy(operation_desc, "assignment");
+            return value;
+        }
+    }
+
+        if (parser.current_token.type == TOKEN_PRINT) {
+        parser.current_token = get_next_token(&parser);
+        
+        if (parser.current_token.type == TOKEN_OPERATOR && parser.current_token.op == '(') {
+            parser.current_token = get_next_token(&parser);
+            
+            if (parser.current_token.type == TOKEN_VARIABLE) {
+                char var_name = parser.current_token.variable;
+                int value = get_variable_value(var_name);
+                
+                parser.current_token = get_next_token(&parser);
+                if (parser.current_token.type == TOKEN_OPERATOR && parser->current_token.op == ')') {
+                    snprintf(operation_desc, 50, "Print %c", var_name);
+                    printf("%d\n", value);
+                    return value;
+                }
+            }
+        }
+    }
+
+     int result = parse_expression(&parser);
+    strcpy(operation_desc, "Arithmetic operation");
+    return result;
+}
