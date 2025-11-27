@@ -96,3 +96,49 @@ Letter* find_letter_by_id(const PostSystem *system, int id){
     return NULL;
 }
 
+// упр отдел
+int add_post_office(PostSystem* system, int id, int max_capacity, const int *connected_ids, int connected_count){
+    if (!system || find_office_by_id(system, id)){
+        return 0;
+    }
+
+    if (system->office_count >= system->offices_capacity) {
+        system->offices_capacity *= 2;
+        PostOffice *new_offices = realloc(system->offices, system->offices_capacity * sizeof(PostOffice));
+        if (!new_offices) return 0;
+        system->offices = new_offices;
+    }
+    
+    PostOffice *office = &system->offices[system->office_count];
+    office->id = id;
+    office->max_capacity = max_capacity;
+    office->current_load = 0;
+    office->connected_count = connected_count;
+    office->letter_queue = create_heap(10);
+
+    if (connected_count > 0){
+        office->connected_ids = malloc(connected_count * sizeof(int));
+        if (!office->connected_ids){
+            return 0;
+        }
+        memcpy(office->connected_ids, connected_ids, connected_count * sizeof(int));
+    } else {
+        office->connected_ids = NULL;
+    }
+
+    system->office_count++;
+
+    char message[100];
+    snprintf(message, sizeof(message), "added post office %d eith capacity %d", id, max_capacity);
+    log_event(system,message);
+
+    return 1;
+}
+
+int remove_post_office(PostSystem *system, int id){
+    if (!system){
+        return 0;
+    }
+
+    
+}
