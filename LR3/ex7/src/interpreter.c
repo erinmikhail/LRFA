@@ -137,9 +137,52 @@ static int power(int base, int exp) {
     return result;
 }
 
-static int parse_expression(Parser* parser);
-static int parse_term(Parser* parser);
-static int parse_factor(Parser* parser);
+static int parse_expression(Parser* parser) {
+    int result = parse_term(parser);
+    
+    while (parser->current_token.type == TOKEN_OPERATOR && 
+           (parser->current_token.op == '+' || parser->current_token.op == '-')) {
+        char op = parser->current_token.op;
+        parser->current_token = get_next_token(parser);
+        int right = parse_term(parser);
+        
+        if (op == '+') {
+            result += right;
+        } else if (op == '-') {
+            result -= right;
+        }
+    }
+
+    if (parser->current_token.type == TOKEN_OPERATOR && parser->current_token.op == '^'){
+        parser->current_token = get_next_token(parser);
+        int exponent = parse_expression(parser);
+        result = power(result,exponent);
+    }
+
+    return result;
+}
+
+static int parse_term (Parser* parser){
+        int result = parse_factor(parser);
+    
+    while (parser->current_token.type == TOKEN_OPERATOR && 
+           (parser->current_token.op == '*' || parser->current_token.op == '/')) {
+        char op = parser->current_token.op;
+        parser->current_token = get_next_token(parser);
+        int right = parse_factor(parser);
+        
+        if (op == '*') {
+            result *= right;
+        } else if (op == '/') {
+            if (right != 0) {
+                result /= right;
+            }
+        }
+    }
+    
+    return result;
+}
+
 
 static int parse_factor(Parser* parser){
     Token token = parser->current_token;
@@ -169,4 +212,5 @@ static int parse_factor(Parser* parser){
 
     return 0;
 }
+
 
