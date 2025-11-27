@@ -80,3 +80,59 @@ void get_variables_state(char* buffer, int buffer_size){
         strcpy(buffer, "No variables");
     }
 }
+
+static void skip_whitespace(Parser* parser) {
+    while (parser->input[parser->position] == ' ') {
+        parser->position++;
+    }
+}
+
+static Token get_next_token(Parser* parser) {
+    skip_whitespace(parser);
+    
+    char current_char = parser->input[parser->position];
+    
+    if (current_char == '\0') {
+        return (Token){TOKEN_EOF, 0, 0, 0};
+    }
+
+     if (isdigit(current_char)) {
+        int value = 0;
+        while (isdigit(parser->input[parser->position])) {
+            value = value * 10 + (parser->input[parser->position] - '0');
+            parser->position++;
+        }
+        return (Token){TOKEN_NUMBER, value, 0, 0};
+    }
+
+     if (current_char >= 'A' && current_char <= 'Z') {
+        parser->position++;
+        return (Token){TOKEN_VARIABLE, 0, 0, current_char};
+    }
+
+    if (strchr("+-*/^=()", current_char)) {
+        parser->position++;
+        return (Token){TOKEN_OPERATOR, 0, current_char, 0};
+    }
+
+     if (strncmp(&parser->input[parser->position], "print", 5) == 0) {
+        parser->position += 5;
+        return (Token){TOKEN_PRINT, 0, 0, 0};
+    }
+
+    return (Token){TOKEN_ERROR, 0, 0, 0};
+}
+
+static void parser_init(Parser* parser, const char* input) {
+    parser->input = input;
+    parser->position = 0;
+    parser->current_token.type = TOKEN_ERROR;
+}
+
+static int power(int base, int exp) {
+    int result = 1;
+    for (int i = 0; i < exp; i++) {
+        result *= base;
+    }
+    return result;
+}
