@@ -231,7 +231,7 @@ int execute_line(const char* input, char* operation_desc){
         }
     }
 
-        if (parser.current_token.type == TOKEN_PRINT) {
+    if (parser.current_token.type == TOKEN_PRINT) {
         parser.current_token = get_next_token(&parser);
         
         if (parser.current_token.type == TOKEN_OPERATOR && parser.current_token.op == '(') {
