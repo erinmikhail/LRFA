@@ -9,7 +9,7 @@
 void process_file(const char* input_filename){
     FILE* file = fopen(input_filename, "r");
     if (!file){
-        prinf("error: cannot open file\n");
+        printf("error: cannot open file\n");
         return;
     }
 
@@ -26,12 +26,12 @@ void process_file(const char* input_filename){
         }
 
         char operation_desc[50];
-        int result = execute_line(line, operation_desc);
+        execute_line(line, operation_desc);
 
         char variables_str[512];
         get_variables_state(variables_str, sizeof(variables_str));
 
-        log_operation(line_num, variables_str, operation_desc);
+        log_operation(line_num, line, variables_str, operation_desc);
         line_num++;
     }
 
@@ -43,11 +43,11 @@ void process_file(const char* input_filename){
 int main(int argc, char* argv[]){
     const char* input_filename = "input.txt";
 
-    if (argc < 1){
+    if (argc > 1){
         input_filename = argv[1];
     }
 
     process_file(input_filename);
-    printf("processing complete.");
+    printf("processing complete.\n");
     return 0;
 }
