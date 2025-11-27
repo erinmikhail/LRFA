@@ -9,7 +9,7 @@ typedef struct{
     size_t capacity;
 } Heap;
 
-Heap create_heap(size_t initial_capaity);
+Heap create_heap(size_t initial_capacity);
 void delete_heap(Heap *h);
 int is_empty_heap(const Heap *h);
 size_t size_heap(const Heap *h);

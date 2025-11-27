@@ -36,7 +36,7 @@ size_t size_heap(const Heap *h){
 
 int peek_heap(const Heap *h){
     if (is_empty_heap(h)){
-        fprintf(stderr, "Heap id empty\n");
+        fprintf(stderr, "Heap is empty\n");
         return -1;
     }
     return h->data[0];
@@ -50,8 +50,8 @@ void swap(int *a, int *b){
 
 void heapify_up(Heap *h, int index){
     while (index > 0){
-        int parent = (index -1) / 2;
-        if (h->data[parent] <= h->data[index]){
+        int parent = (index - 1) / 2;
+        if (h->data[parent] >= h->data[index]){
             break;
         }
         swap(&h->data[parent], &h->data[index]);
@@ -64,28 +64,28 @@ void heapify_down(Heap *h, int index){
     while (1){
         int left = 2 * index + 1;
         int right = 2 * index + 2;
-        int smallest = index;
+        int largest = index;
 
-        if (left < size && h->data[left] < h->data[smallest]){
-            smallest = left;
+        if (left < size && h->data[left] > h->data[largest]){
+            largest = left;
         }
 
-        if (right < size && h->data[right] < h->data[smallest]){
-            smallest = right;
+        if (right < size && h->data[right] > h->data[largest]){
+            largest = right;
         }
 
-        if (smallest == index){
+        if (largest == index){
             break;
         }
 
-        swap(&h->data[index], &h->data[smallest]);
-        index = smallest;
+        swap(&h->data[index], &h->data[largest]);
+        index = largest;
     }
 }
 
 int push_heap(Heap *h, int value){
     if (h->size >= h->capacity){
-        size_t new_capacity = h ->capacity * 2;
+        size_t new_capacity = h->capacity * 2;
         int *new_data = (int*)realloc(h->data, new_capacity * sizeof(int));
         if (!new_data){
             fprintf(stderr, "Heap realloc failed\n");
