@@ -8,7 +8,7 @@
 static int variables[NUM_VARIABLES];
 static int initialized[NUM_VARIABLES];
 
-typedef enum{
+typedef enum {
     TOKEN_NUMBER,
     TOKEN_VARIABLE,
     TOKEN_OPERATOR,
@@ -31,15 +31,19 @@ typedef struct {
     int position;
 } Parser;
 
+static int parse_expression(Parser* parser);
+static int parse_term(Parser* parser);
+static int parse_factor(Parser* parser);
+
 void init_interpreter(){
     for (int i = 0; i < NUM_VARIABLES; i++){
-        variables[i];
+        variables[i] = 0; 
         initialized[i] = 0;
     }
 }
 
 void cleanup_interpreter(){
-    //заглушка
+    // заглушка
 }
 
 int get_variable_value(char name){
@@ -49,7 +53,7 @@ int get_variable_value(char name){
     return variables[name - 'A'];
 }
 
-void get_variable_value(char name, int value){
+void set_variable_value(char name, int value){
     if (name >= 'A' && name <= 'Z'){
         variables[name - 'A'] = value;
         initialized[name - 'A'] = 1;
@@ -70,13 +74,13 @@ void get_variables_state(char* buffer, int buffer_size){
                 snprintf(var_str, sizeof(var_str), ", %c=%d", 'A' + i, variables[i]);
             }
             
-            if (strlen(buffer) + strlen(var_str) < buffer_size) {
+            if ((int)(strlen(buffer) + strlen(var_str)) < buffer_size) {
                 strcat(buffer, var_str);
             }
         }
     }
 
-        if (buffer[0] == '\0') {
+    if (buffer[0] == '\0') {
         strcpy(buffer, "No variables");
     }
 }
@@ -96,7 +100,7 @@ static Token get_next_token(Parser* parser) {
         return (Token){TOKEN_EOF, 0, 0, 0};
     }
 
-     if (isdigit(current_char)) {
+    if (isdigit(current_char)) {
         int value = 0;
         while (isdigit(parser->input[parser->position])) {
             value = value * 10 + (parser->input[parser->position] - '0');
@@ -105,7 +109,7 @@ static Token get_next_token(Parser* parser) {
         return (Token){TOKEN_NUMBER, value, 0, 0};
     }
 
-     if (current_char >= 'A' && current_char <= 'Z') {
+    if (current_char >= 'A' && current_char <= 'Z') {
         parser->position++;
         return (Token){TOKEN_VARIABLE, 0, 0, current_char};
     }
@@ -115,7 +119,7 @@ static Token get_next_token(Parser* parser) {
         return (Token){TOKEN_OPERATOR, 0, current_char, 0};
     }
 
-     if (strncmp(&parser->input[parser->position], "print", 5) == 0) {
+    if (strncmp(&parser->input[parser->position], "print", 5) == 0) {
         parser->position += 5;
         return (Token){TOKEN_PRINT, 0, 0, 0};
     }
@@ -134,6 +138,56 @@ static int power(int base, int exp) {
     for (int i = 0; i < exp; i++) {
         result *= base;
     }
+    return result;
+}
+
+static int parse_factor(Parser* parser){
+    Token token = parser->current_token;
+
+    if (token.type == TOKEN_NUMBER){  
+        parser->current_token = get_next_token(parser);
+        return token.value;
+    }
+
+    if (token.type == TOKEN_VARIABLE){
+        int value = get_variable_value(token.variable);  
+        parser->current_token = get_next_token(parser);
+        return value;
+    }
+
+    if (token.type == TOKEN_OPERATOR && token.op == '('){
+        parser->current_token = get_next_token(parser);
+        int result = parse_expression(parser);
+
+        if (parser->current_token.type != TOKEN_OPERATOR || parser->current_token.op != ')'){
+            return 0;
+        }
+
+        parser->current_token = get_next_token(parser);
+        return result;
+    }
+
+    return 0;
+}
+
+static int parse_term(Parser* parser){
+    int result = parse_factor(parser);
+    
+    while (parser->current_token.type == TOKEN_OPERATOR && 
+           (parser->current_token.op == '*' || parser->current_token.op == '/')) {
+        char op = parser->current_token.op;
+        parser->current_token = get_next_token(parser);
+        int right = parse_factor(parser);
+        
+        if (op == '*') {
+            result *= right;
+        } else if (op == '/') {
+            if (right != 0) {
+                result /= right;
+            }
+        }
+    }
+    
     return result;
 }
 
@@ -156,61 +210,10 @@ static int parse_expression(Parser* parser) {
     if (parser->current_token.type == TOKEN_OPERATOR && parser->current_token.op == '^'){
         parser->current_token = get_next_token(parser);
         int exponent = parse_expression(parser);
-        result = power(result,exponent);
+        result = power(result, exponent);
     }
 
     return result;
-}
-
-static int parse_term (Parser* parser){
-        int result = parse_factor(parser);
-    
-    while (parser->current_token.type == TOKEN_OPERATOR && 
-           (parser->current_token.op == '*' || parser->current_token.op == '/')) {
-        char op = parser->current_token.op;
-        parser->current_token = get_next_token(parser);
-        int right = parse_factor(parser);
-        
-        if (op == '*') {
-            result *= right;
-        } else if (op == '/') {
-            if (right != 0) {
-                result /= right;
-            }
-        }
-    }
-    
-    return result;
-}
-
-
-static int parse_factor(Parser* parser){
-    Token token = parser->current_token;
-
-    if (token.type = TOKEN_NUMBER){
-        parser->current_token = get_next_token(parser);
-        return token.value;
-    }
-
-    if (token.type == TOKEN_VARIABLE){
-        int value = get_variable_value(token.variable);
-        parser->current_token = get_next_token(parser);
-        return value;
-    }
-
-    if (token.type == TOKEN_OPERATOR && token.op == '('){
-        parser->current_token = get_next_token(parser);
-        int result = parse_expression(parser);
-
-        if (parser->current_token.type != TOKEN_OPERATOR || parser->current_token.op != ')'){
-            return 0;
-        }
-
-        parser->current_token = get_next_token(parser);
-        return result;
-    }
-
-    return 0;
 }
 
 int execute_line(const char* input, char* operation_desc){
@@ -225,8 +228,8 @@ int execute_line(const char* input, char* operation_desc){
         if (parser.current_token.type == TOKEN_OPERATOR && parser.current_token.op == '='){
             parser.current_token = get_next_token(&parser);
             int value = parse_expression(&parser);
-            set_variable_value(var_name, value);
-            strcpy(operation_desc, "assignment");
+            set_variable_value(var_name, value);  
+            strcpy(operation_desc, "Assignment");  
             return value;
         }
     }
@@ -239,10 +242,10 @@ int execute_line(const char* input, char* operation_desc){
             
             if (parser.current_token.type == TOKEN_VARIABLE) {
                 char var_name = parser.current_token.variable;
-                int value = get_variable_value(var_name);
+                int value = get_variable_value(var_name);  
                 
                 parser.current_token = get_next_token(&parser);
-                if (parser.current_token.type == TOKEN_OPERATOR && parser->current_token.op == ')') {
+                if (parser.current_token.type == TOKEN_OPERATOR && parser.current_token.op == ')') {  
                     snprintf(operation_desc, 50, "Print %c", var_name);
                     printf("%d\n", value);
                     return value;
@@ -251,7 +254,7 @@ int execute_line(const char* input, char* operation_desc){
         }
     }
 
-     int result = parse_expression(&parser);
+    int result = parse_expression(&parser);
     strcpy(operation_desc, "Arithmetic operation");
     return result;
 }
