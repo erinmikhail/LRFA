@@ -7,7 +7,7 @@ int execute_line(const char* line, char* operation_desc);
 void get_variables_state(char* buffer, int buffer_size);
 void cleanup_interpreter();
 
-int get_variable_value(const name);
+int get_variable_value(char name);
 void set_variable_value(char name, int value);
 
 #endif
