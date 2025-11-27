@@ -82,4 +82,17 @@ PostOffice* find_office_by_id(const PostSystem *system, int id){
     return NULL;
 }
 
-Letter* find_letter_by_id(){}
+Letter* find_letter_by_id(const PostSystem *system, int id){
+    if (!system){
+        return NULL;
+    }
+
+    for (int i = 0; i < system->letter_count; i++){
+        if (system->letters[i].id == id){
+            return (PostOffice*)&system->letters[i];
+        }
+    }
+
+    return NULL;
+}
+
