@@ -136,3 +136,37 @@ static int power(int base, int exp) {
     }
     return result;
 }
+
+static int parse_expression(Parser* parser);
+static int parse_term(Parser* parser);
+static int parse_factor(Parser* parser);
+
+static int parse_factor(Parser* parser){
+    Token token = parser->current_token;
+
+    if (token.type = TOKEN_NUMBER){
+        parser->current_token = get_next_token(parser);
+        return token.value;
+    }
+
+    if (token.type == TOKEN_VARIABLE){
+        int value = get_variable_value(token.variable);
+        parser->current_token = get_next_token(parser);
+        return value;
+    }
+
+    if (token.type == TOKEN_OPERATOR && token.op == '('){
+        parser->current_token = get_next_token(parser);
+        int result = parse_expression(parser);
+
+        if (parser->current_token.type != TOKEN_OPERATOR || parser->current_token.op != ')'){
+            return 0;
+        }
+
+        parser->current_token = get_next_token(parser);
+        return result;
+    }
+
+    return 0;
+}
+
