@@ -140,5 +140,69 @@ int remove_post_office(PostSystem *system, int id){
         return 0;
     }
 
+    int office_index = -1;
+    for (int i = 0; i < system->office_count; i++){
+        if (system->offices[i].id == id){
+            office_index = i;
+            break;
+        }
+    }
+
+    if (office_index == -1){
+        return 0;
+    }
+
+    PostOffice *office = &system->offices[office_index];
+
+    while (!is_empty_heap(&office->letter_queue)){
+        int letter_id = pop_heap(&office->letter_queue);
+        Letter *letter = find_letter_by_id(system, letter_id);
+
+        if (letter){
+            if (letter->to_post_id == id || letter->from_post_id == id){
+                letter->state = UNDELIVERED;
+                char message[100];
+                snprintf(message,sizeof(message), "Letter %d marked as undelivered - ffice %d remove", letter->id, id);
+                log_event(system, message);
+            } else {
+                int redirected = 0;
+                for (int j = 0; j < office->connected_count && !redirected; j++){
+                    PostOffice *connected = find_office_by_id(system, office->connected_ids[j]);
+                    if (connected && connected->current_load < connected->max_capacity){
+                        push_heap(&connected->letter_queue, -letter->priority);
+                        connected->current_load++;
+                        letter->current_post_id = connected->id;
+                        redirected = 1;
+
+                        char message[100];
+                        snprintf(message, sizeof(message), "Letter %d redirected to office %d", letter->id, connected->id);
+                        log_event(system, message);
+                    }
+                }
+
+                if (!redirected){
+                    letter->state = UNDELIVERED;
+                    char message[100];
+                    snprintf(message, sizeof(message), "Letter %d marked as undelivered - no route", letter->id);
+                    log_event(system, message);
+                }
+            }
+        }
+    }
+
+    delete_heap(&office->letter_queue);
+    free(office->connected_ids);
+
+    for (int i = office_index; i < system->office_count -1; i++){
+        system->offices[i] = system->offices[i + 1];
+    }
+    system->office_count--;
+
+    char message[100];
+    snprintf(message, sizeof(message), "Removed post office %d", id);
+    log_event(system, message);
     
+    return 1;
 }
+
+
