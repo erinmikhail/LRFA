@@ -66,3 +66,20 @@ void log_event(const PostSystem *system, const char *message){
     }
 }
 
+
+// вспомогтательные функции для работы посикс
+PostOffice* find_office_by_id(const PostSystem *system, int id){
+    if (!system){
+        return NULL;
+    }
+
+    for (int i = 0; i < system->office_count; i++){
+        if (system->offices[i].id == id){
+            return (PostOffice*)&system->offices[i];
+        }
+    }
+
+    return NULL;
+}
+
+Letter* find_letter_by_id(){}
