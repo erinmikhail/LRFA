@@ -194,8 +194,13 @@ static int parse_term(Parser* parser){
         
         if (op == '*') {
             result *= right;
+            if (right == 0){
+                printf("Умножение на 0\n");
+            }
         } else if (op == '/') {
-            if (right != 0) {
+            if (right == 0) {
+                printf("деление на ноль");
+            } else {
                 result /= right;
             }
         }

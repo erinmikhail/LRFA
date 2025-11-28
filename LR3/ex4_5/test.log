@@ -1,9 +1,0 @@
-[Thu Nov 27 20:32:56 2025] Post system init
-
-[Thu Nov 27 20:32:56 2025] added post office 1 with capacity 5
-[Thu Nov 27 20:32:56 2025] added post office 2 with capacity 5
-[Thu Nov 27 20:32:56 2025] Added letter 1 from office 1 to office 2 (priority: 5)
-[Thu Nov 27 20:32:56 2025] Letter 1 moved from office 1 to office 2
-[Thu Nov 27 20:32:56 2025] Letter 1 delivered to office 2
-[Thu Nov 27 20:32:56 2025] Post system shutdown
-

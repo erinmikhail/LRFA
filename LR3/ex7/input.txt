@@ -2,4 +2,5 @@ A = 2
 B = 3
 C = A + B * 2
 D = C ^ B
-print(D)
+Q = D / 0
+print(Q)
