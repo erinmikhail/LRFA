@@ -33,6 +33,7 @@ typedef struct {
 
 static int parse_expression(Parser* parser);
 static int parse_term(Parser* parser);
+static int parse_power(Parser* parser);
 static int parse_factor(Parser* parser);
 
 void init_interpreter(){
@@ -170,14 +171,26 @@ static int parse_factor(Parser* parser){
     return 0;
 }
 
-static int parse_term(Parser* parser){
+static int parse_power(Parser* parser) {
     int result = parse_factor(parser);
+    
+    if (parser->current_token.type == TOKEN_OPERATOR && parser->current_token.op == '^') {
+        parser->current_token = get_next_token(parser);
+        int exponent = parse_power(parser); 
+        result = power(result, exponent);
+    }
+    
+    return result;
+}
+
+static int parse_term(Parser* parser){
+    int result = parse_power(parser);
     
     while (parser->current_token.type == TOKEN_OPERATOR && 
            (parser->current_token.op == '*' || parser->current_token.op == '/')) {
         char op = parser->current_token.op;
         parser->current_token = get_next_token(parser);
-        int right = parse_factor(parser);
+        int right = parse_power(parser);
         
         if (op == '*') {
             result *= right;
@@ -205,12 +218,6 @@ static int parse_expression(Parser* parser) {
         } else if (op == '-') {
             result -= right;
         }
-    }
-
-    if (parser->current_token.type == TOKEN_OPERATOR && parser->current_token.op == '^'){
-        parser->current_token = get_next_token(parser);
-        int exponent = parse_expression(parser);
-        result = power(result, exponent);
     }
 
     return result;
